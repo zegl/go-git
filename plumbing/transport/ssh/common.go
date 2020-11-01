@@ -88,12 +88,21 @@ func (c *command) Close() error {
 
 	c.connected = false
 
-	//XXX: If did read the full packfile, then the session might be already
+	// XXX: If did read the full packfile, then the session might be already
 	//     closed.
 	_ = c.Session.Close()
 	err := c.client.Close()
 
-	//XXX: in go1.16+ we can use errors.Is(err, net.ErrClosed)
+	// Ignore errors when closing the client if the session has
+	// already been closed by the server. This has to be done
+	// as some git server will close the connection before the
+	// client does.
+	err := c.client.Close()
+	if serr.Error() == "EOF" {
+		return nil
+	}
+
+	// XXX: in go1.16+ we can use errors.Is(err, net.ErrClosed)
 	if err != nil && strings.HasSuffix(err.Error(), "use of closed network connection") {
 		return nil
 	}
