@@ -97,7 +97,7 @@ func (c *command) Close() error {
 	// as some git server will close the connection before the
 	// client does.
 	err := c.client.Close()
-	if serr != nil && serr.Error() == "EOF" {
+	if err != nil && err.Error() == "EOF" {
 		return nil
 	}
 
