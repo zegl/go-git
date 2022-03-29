@@ -91,7 +91,6 @@ func (c *command) Close() error {
 	// XXX: If did read the full packfile, then the session might be already
 	//     closed.
 	_ = c.Session.Close()
-	err := c.client.Close()
 
 	// Ignore errors when closing the client if the session has
 	// already been closed by the server. This has to be done
