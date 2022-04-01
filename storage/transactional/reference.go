@@ -49,7 +49,7 @@ func (r *ReferenceStorage) CheckAndSetReference(ref, old *plumbing.Reference) er
 		return err
 	}
 
-	if tmp.Hash() != old.Hash() {
+	if tmp.Hash() != old.Hash() && !tmp.Hash().IsZero() && !old.Hash().IsZero() {
 		return storage.ErrReferenceHasChanged
 	}
 

@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/go-git/go-billy/v5/osfs"
+
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/go-git/go-git/v5/storage"
 	"github.com/go-git/go-git/v5/utils/ioutil"
@@ -241,7 +242,7 @@ func (d *DotGit) objectPacks() ([]plumbing.Hash, error) {
 			continue
 		}
 
-		h := plumbing.NewHash(n[5 : len(n)-5]) //pack-(hash).pack
+		h := plumbing.NewHash(n[5 : len(n)-5]) // pack-(hash).pack
 		if h.IsZero() {
 			// Ignore files with badly-formatted names.
 			continue
@@ -662,7 +663,7 @@ func (d *DotGit) checkReferenceAndTruncate(f billy.File, old *plumbing.Reference
 	if err != nil {
 		return err
 	}
-	if ref.Hash() != old.Hash() {
+	if ref.Hash() != old.Hash() && !ref.Hash().IsZero() && !old.Hash().IsZero() {
 		return storage.ErrReferenceHasChanged
 	}
 	_, err = f.Seek(0, io.SeekStart)

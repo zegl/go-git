@@ -325,6 +325,12 @@ func (s *BaseStorageSuite) TestCheckAndSetReferenceError(c *C) {
 	e, err := s.Storer.Reference(plumbing.ReferenceName("foo"))
 	c.Assert(err, IsNil)
 	c.Assert(e.Hash().String(), Equals, "c3f4688a08fd86f1bf8e055724c84b7a40a09733")
+
+	err = s.Storer.CheckAndSetReference(
+		plumbing.NewReferenceFromStrings("foo", ""),
+		plumbing.NewReferenceFromStrings("foo", ""),
+	)
+	c.Assert(err, IsNil)
 }
 
 func (s *BaseStorageSuite) TestRemoveReference(c *C) {
